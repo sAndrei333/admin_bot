@@ -16,24 +16,24 @@ async def record_violations(user_id):
 async def check_user_mut(user_id):
     if user_id in user_violations:
         violations = user_violations[user_id]
-        if violations['count'] >= MAX_VIOLATIONS[1]:
+        if violations['count'] == MAX_VIOLATIONS[1]:
             mute_end = violations['last_violations']+ timedelta(minutes=MUTE_DURATION[1])
             if datetime.now()< mute_end:
                 return True
             else:
                 user_violations[user_id]= {'count':0, 'last_violations': None}
-        if violations['count'] >= MAX_VIOLATIONS[2]:
-            mute_end = violations['last_violations']+ timedelta(minutes=MUTE_DURATION[2])
-            if datetime.now()< mute_end:
-                return True
-            else:
-                user_violations[user_id]= {'count':0, 'last_violations': None}
-        if violations['count'] >= MAX_VIOLATIONS[3]:
-            mute_end = violations['last_violations']+ timedelta(minutes=MUTE_DURATION[3])
-            if datetime.now()< mute_end:
-                return True
-            else:
-                user_violations[user_id]= {'count':0, 'last_violations': None}
+       #if violations['count'] == MAX_VIOLATIONS[2]:
+       #    mute_end = violations['last_violations']+ timedelta(minutes=MUTE_DURATION[2])
+       #    if datetime.now()< mute_end:
+       #        return True
+       #    else:
+       #        user_violations[user_id]= {'count':0, 'last_violations': None}
+       #if violations['count'] == MAX_VIOLATIONS[3]:
+       #    mute_end = violations['last_violations']+ timedelta(minutes=MUTE_DURATION[3])
+       #    if datetime.now()< mute_end:
+       #        return True
+       #    else:
+       #        user_violations[user_id]= {'count':0, 'last_violations': None}
     return False
 @router.message()
 
