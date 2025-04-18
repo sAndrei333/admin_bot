@@ -11,5 +11,5 @@ FORBIDEN_WORDS  =['спам', 'реклама', 'взлом']
 user_violations = {}
 MIN_VIOLATIONS = 1
 MID_VIOLATIONS = 2
-MAX_VIOLATIONS = 1
+MAX_VIOLATIONS = 3
 MUTE_DURATION  = [1, 2, 3]
