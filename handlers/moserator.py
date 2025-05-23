@@ -26,6 +26,7 @@ async def record_violations(user_id):
             'count_viol': 0
         }
 
+
     violations = user_violations[user_id]
     violations['count'] += 1
     violations['last_violations'] = datetime.now()
@@ -52,7 +53,7 @@ async def check_user_mut(user_id):
                 #cursor.execute("INSERT INTO viols (count_violations, count, id) VALUES (?,?,?)",
                 #               (violations['count_viol'], violations['count'], user_id))
                 #con.commit()
-                cursor.execute("UPDATE  viols SET ( count_violations = violations['count_viol'] count = violations['count'], id = user_id")
+                cursor.execute("UPDATE  viols SET count_violations = ?, count = ? WHERE id = ?",(violations['count_viol'],violations['count'] ))
                                #(violations['count_viol'], violations['count'], user_id))
                 con.commit()
      #           if violations['count'] >= MAX_VIOLATIONS:
