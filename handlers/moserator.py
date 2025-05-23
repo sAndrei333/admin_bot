@@ -4,7 +4,7 @@ import os
 import speech_recognition as sr
 from moviepy.editor import AudioFileClip
 from aiogram import F
-from aiogram.types import Message
+from aiogram.types import Message, KeyboardButton
 from loader import (router, FORBIDEN_WORDS, user_violations, MAX_VIOLATIONS, MUTE_DURATION, MIN_VIOLATIONS, bot)
 from datetime import timedelta, datetime
 con = sqlite3.connect("data/data.db", check_same_thread=False)
@@ -31,9 +31,12 @@ async def record_violations(user_id):
     violations['last_violations'] = datetime.now()
 
 
+
 async def check_user_mut(user_id):
     print(user_violations)
+
     if user_id in user_violations:
+
         violations = user_violations[user_id]
         if violations['count'] >= MIN_VIOLATIONS:
             mute_end = violations['last_violations'] + timedelta(seconds=(1 + 1 * violations['count_viol']))
@@ -46,8 +49,11 @@ async def check_user_mut(user_id):
                 violations['count_viol'] += 1
                 violations['count'] = violations['count']
                 violations['last_violations'] = None
-                cursor.execute("INSERT INTO  viols (count_violations, count, id) VALUES (?,?,?)",
-                               (violations['count_viol'], violations['count'], user_id))
+                #cursor.execute("INSERT INTO viols (count_violations, count, id) VALUES (?,?,?)",
+                #               (violations['count_viol'], violations['count'], user_id))
+                #con.commit()
+                cursor.execute("UPDATE  viols SET ( count_violations = violations['count_viol'] count = violations['count'], id = user_id")
+                               #(violations['count_viol'], violations['count'], user_id))
                 con.commit()
      #           if violations['count'] >= MAX_VIOLATIONS:
      #               return await ban_member(user_id, bot)
@@ -73,7 +79,7 @@ async def handle_voice(message: Message):
     with sr.AudioFile(wav_path) as source:
         audio_data = recognizer.record(source)
         text = recognizer.recognize_google(audio_data, language='ru-RU')
-        await message.reply(f'Текст из гс: \n{text}')
+        #await message.reply(f'Текст из гс: \n{text}')
     if os.path.exists(ogg_path):
         os.remove(ogg_path)
     if os.path.exists(wav_path):
@@ -93,10 +99,18 @@ async def handle_voice(message: Message):
                 f'@{message.from_user.username}, сообщение удалено:'f"содержит запрещённое слово. Нарушение#{user_violations[user_id]['count']}")
 
 
+
 @router.message(F.text)
 async def handle_message(message: Message):
 
     user_id = message.from_user.id
+    #test = cursor.execute('SELECT id FROM viols')
+    #if test in con:
+    #    message.KeyboardButton(text="Капча")
+    #    #async def capcha_compleated()
+
+#
+
 
 
     if await check_user_mut(user_id):
